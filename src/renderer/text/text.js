@@ -1,7 +1,7 @@
 const escapeXml = require("../../utils/escapeXml");
 
 function generateText({
-    title = "HEMANTH",
+    title = "test",
     subtitle = "",
     width,
     height,

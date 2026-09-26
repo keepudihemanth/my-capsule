@@ -2,7 +2,7 @@ const fs = require("fs");
 const generateSvg = require("../src/renderer/generateSvg");
 
 const svg = generateSvg({
-    text: "HEMANTH",
+    text: "name",
     subtitle: "Software Engineer | AI & ML",
     width: 1000,
     height: 350,
