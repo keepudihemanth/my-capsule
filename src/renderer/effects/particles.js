@@ -1,3 +1,8 @@
+function pseudoRandom(seed) {
+    const value = Math.sin(seed) * 10000;
+    return value - Math.floor(value);
+}
+
 function generateParticles({
     width,
     height,
@@ -6,11 +11,18 @@ function generateParticles({
     let particles = "";
 
     for (let i = 0; i < count; i++) {
-        const x = Math.random() * width;
-        const y = Math.random() * height * 0.65;
-        const radius = 1 + Math.random() * 3;
-        const duration = 3 + Math.random() * 5;
-        const delay = Math.random() * 3;
+
+        const x = pseudoRandom(i + 1) * width;
+        const y = pseudoRandom(i + 20) * height * 0.65;
+
+        const radius =
+            1 + pseudoRandom(i + 40) * 3;
+
+        const duration =
+            3 + pseudoRandom(i + 60) * 5;
+
+        const delay =
+            pseudoRandom(i + 80) * 3;
 
         particles += `
 <circle

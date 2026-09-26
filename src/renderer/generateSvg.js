@@ -6,71 +6,83 @@ const generateParticles = require("./effects/particles");
 const generateText = require("./text/text");
 
 function generateSvg(config = {}) {
+  const {
+    text: title,
+    subtitle,
+    width,
+    height,
+    type,
+    background,
+    fontSize,
+    fontColor,
+    animation,
+    particleCount,
+    waveSpeed1,
+    waveSpeed2,
+    waveOffset,
+  } = validateConfig(config);
 
-    const {
-        text: title,
-        subtitle,
-        width,
-        height,
-        type,
-        background,
-        fontSize,
-        fontColor,
-        animation
-    } = validateConfig(config);
+  const isGradient = Array.isArray(background);
 
-    const isGradient = Array.isArray(background);
-
-    const defs = isGradient
-        ? `
+  const defs = `
 <defs>
-    ${generateGradient("backgroundGradient", background)}
+
+    ${isGradient ? generateGradient("backgroundGradient", background) : ""}
+
+    <clipPath id="viewport">
+        <rect
+            x="0"
+            y="0"
+            width="${width}"
+            height="${height}"
+        />
+    </clipPath>
+
 </defs>
-`
-        : "";
+`;
 
-    const backgroundFill = isGradient
-        ? "url(#backgroundGradient)"
-        : background;
+  const backgroundFill = isGradient ? "url(#backgroundGradient)" : background;
 
-    const animationGenerator = getAnimation(animation);
-    const animationStyles = animationGenerator();
+  const animationGenerator = getAnimation(animation);
+  const animationStyles = animationGenerator();
 
-    const particles = generateParticles({
-        width,
-        height,
-        count: 15
-    });
+  const particles = generateParticles({
+    width,
+    height,
+    count: particleCount,
+  });
 
-    const wave1 = getShape("wave")({
-        width,
-        height,
-        fill: "#ffffff",
-        opacity: 0.15,
-        duration: 6,
-        direction: 1
-    });
+  const wave1 = getShape("wave")({
+    width,
+    height,
+    fill: "#ffffff",
+    opacity: 0.15,
+    duration: waveSpeed1,
+    direction: 1,
+    offset: 0,
+  });
 
-    const wave2 = getShape("wave")({
-        width,
-        height,
-        fill: "#ffffff",
-        opacity: 0.08,
-        duration: 10,
-        direction: -1
-    });
+  const wave2 = getShape("wave")({
+    width,
+    height,
+    fill: "#ffffff",
+    opacity: 0.08,
+    duration: waveSpeed2,
+    direction: -1,
+    offset: waveOffset,
+  });
 
-    const textLayer = generateText({
-        title,
-        subtitle,
-        width,
-        height,
-        titleSize: fontSize,
-        subtitleSize: 22,
-        color: fontColor
-    });
+  const textLayer = generateText({
+    title,
+    subtitle,
+    width,
+    height,
+    titleSize: fontSize,
+    subtitleSize: 22,
+    color: fontColor,
+  });
 
-    return `
+  return `
 <svg
     width="${width}"
     height="${height}"
@@ -89,9 +101,10 @@ function generateSvg(config = {}) {
 
     ${particles}
 
+   <g clip-path="url(#viewport)">
     ${wave1}
-
     ${wave2}
+    </g>
 
     ${textLayer}
 

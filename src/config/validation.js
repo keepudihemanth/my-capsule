@@ -9,25 +9,61 @@ const shapes = [
 
 const animations = [
     "none",
-    "fadeIn"
+    "fadeIn",
+    "wave"
 ];
 
+function validNumber(value, min, max) {
+    return Number.isFinite(value) && value >= min && value <= max;
+}
+
 function validateConfig(config) {
+
     const result = {
         ...defaults,
         ...config
     };
 
-    if (!Number.isFinite(result.width) || result.width < 100 || result.width > 2000) {
+    if (
+        !validNumber(result.width, 100, 2000)
+    ) {
         result.width = defaults.width;
     }
 
-    if (!Number.isFinite(result.height) || result.height < 50 || result.height > 1000) {
+    if (
+        !validNumber(result.height, 50, 1000)
+    ) {
         result.height = defaults.height;
     }
 
-    if (!Number.isFinite(result.fontSize) || result.fontSize < 10 || result.fontSize > 300) {
+    if (
+        !validNumber(result.fontSize, 10, 300)
+    ) {
         result.fontSize = defaults.fontSize;
+    }
+
+    if (
+        !validNumber(result.particleCount, 0, 100)
+    ) {
+        result.particleCount = defaults.particleCount;
+    }
+
+    if (
+        !validNumber(result.waveSpeed1, 2, 30)
+    ) {
+        result.waveSpeed1 = defaults.waveSpeed1;
+    }
+
+    if (
+        !validNumber(result.waveSpeed2, 2, 30)
+    ) {
+        result.waveSpeed2 = defaults.waveSpeed2;
+    }
+
+    if (
+        !validNumber(result.waveOffset, -100, 100)
+    ) {
+        result.waveOffset = defaults.waveOffset;
     }
 
     if (!shapes.includes(result.type)) {
